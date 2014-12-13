@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -41,12 +43,9 @@ public class XMLCreate
 			String title = itr_str.next();
 			AddSubmission(Integer.toString(count++), "yes", title, paper.get(title), submissions);
 		}
-		
-
-		
+			
 		snapshot.addContent(pc);
 		snapshot.addContent(submissions);
-
 		
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(new Document(snapshot), new FileOutputStream ("d://data.xml"));	
@@ -75,16 +74,12 @@ public class XMLCreate
 		
 		el_pc_member.addContent(new Element("email").setText(itr_str.next() ) );
 		
-		el_pc_member.addContent(new Element("homepage").setText(itr_str.next() ) );
+		itr_str.next();
 		
 		String[] organization = itr_str.next().split(",");
 		el_pc_member.addContent(new Element("country").setText(organization[organization.length-1]));
 		el_pc_member.addContent(new Element("affiliation").setText(organization[0]));
-		
-		String role;
-		if (!(role = itr_str.next()).equals("") );
-			el_pc_member.addContent(new Element("role").setText(role) );
-		
+			
 		parent.addContent(el_pc_member);
 	}
 	
@@ -104,12 +99,22 @@ public class XMLCreate
 	}
 	
 	private void AddSameAs (String name, Element parent)
-	{
+	{		
 		String[] full_name = name.split(" ");
+		
+		if (!NameController(name))
+			return;
 		
 		Element sameAs = new Element("sameAs");		
 		sameAs.setText("http://data.semanticweb.org/person/" + full_name[0] + "-" + full_name[full_name.length-1]);
 		parent.addContent(sameAs);
+	}
+	
+	private boolean NameController (String name)
+	{
+		Pattern p = Pattern.compile("[a-zA-Z]*\\s[a-zA-Z]*");
+		Matcher m = p.matcher(name);  
+        return m.matches();
 	}
 	
 	private void AddSubmission (String number, String paper, String title_name, Map<String, String> name, Element parent)

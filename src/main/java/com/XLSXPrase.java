@@ -2,7 +2,6 @@ package com;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,17 +33,6 @@ public class XLSXPrase
             }
             pc.add(pc_member);
         }
-        
-/*        Iterator<List<String>> itr = pc.iterator();
-        while(itr.hasNext())
-        {
-        	Iterator<String> itr2 = itr.next().iterator();
-        	while(itr2.hasNext())
-        	{
-        		System.out.print(itr2.next() + " | ");
-        	}
-        	System.out.println();
-        }*/
 
         return pc;
 	}
